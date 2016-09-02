@@ -14,6 +14,8 @@ class CategoryDataView(GenericAPIView):
     def get(self, request):
         """Process GET request and return data."""
 
+        print 'Getting Categories'
+
         raw_categories = eventbrite.get_categories().get('categories')
         categories = [self._simplify_category(category) for category in raw_categories]
 
@@ -38,10 +40,13 @@ class SubcategoryDataView(GenericAPIView):
     def get(self, request, category_id):
         """Process GET request and return data."""
 
-        raw_subcategories = eventbrite.get_categories(id=category_id)['subcategories']
+        print 'Getting Subcategories'
+
+        raw_subcategories = eventbrite.get_category(category_id).get('subcategories')
         subcategories = [self._simplify_subcategory(subcategory) for subcategory in raw_subcategories]
 
         data = {
+            'category': category_id,
             'subcategories': sorted(subcategories, key=lambda k: k['id'])
         }
 

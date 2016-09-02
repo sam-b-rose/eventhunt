@@ -6,6 +6,7 @@ import { checkHttpStatus, parseJSON } from '../utils';
 import {
     SELECT_CATEGORY,
     RECEIVE_CATEGORIES,
+    RECEIVE_SUBCATEGORIES,
     FETCH_EVENTS_REQUEST,
     RECEIVE_EVENTS,
     UPDATE_LOCATION
@@ -32,6 +33,36 @@ export function fetchCategories() {
         .then(parseJSON)
         .then(data => {
             dispatch(receiveCategories(data));
+        })
+        .catch(error => {
+            if (error.response.status === 401) {
+                dispatch(push('/'));
+            }
+        });
+    };
+}
+
+/**
+* Subcategory Events
+*/
+export function receiveSubcategories(data) {
+    return {
+        type: RECEIVE_SUBCATEGORIES,
+        payload: data
+    };
+}
+
+export function fetchSubcategories(id) {
+    return (dispatch, state) => {
+        return fetch(`${SERVER_URL}/api/v1/categories/${id}/`, {
+            headers: {
+                Accept: 'application/json'
+            }
+        })
+        .then(checkHttpStatus)
+        .then(parseJSON)
+        .then(data => {
+            dispatch(receiveSubcategories(data));
         })
         .catch(error => {
             if (error.response.status === 401) {
@@ -107,6 +138,7 @@ export function updateSelectedCategories(selectedCategory) {
 export function selectCategory(selectedCategory) {
     return (dispatch, state) => {
         dispatch(updateSelectedCategories(selectedCategory));
+        dispatch(fetchSubcategories(selectedCategory.id));
         dispatch(fetchEvents());
     };
 }

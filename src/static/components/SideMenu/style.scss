@@ -1,11 +1,15 @@
 .side-menu {
+    display: flex;
+    height: 90vh;
     background-color: $color-white;
     padding: 25px;
     box-shadow: 0 1px 1px 0 rgba(0,0,0,0.50);
 
     &__content {
+      display: flex;
+      flex-flow: column nowrap;
+      flex: 1 1 auto;
       opacity: 1;
-      min-height: 730px;
       transition: opacity 0.25s;
 
       &.hide {
@@ -14,6 +18,7 @@
     }
 
     &__title {
+        flex: 0 0 auto;
         color: $color-dark;
         text-transform: uppercase;
         padding-bottom: 8px;
@@ -21,21 +26,38 @@
         border-bottom: 1px solid $color-silver;
     }
 
-    ul {
-        list-style: none;
+    &__categories {
         display: block;
-        li {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            &.active,
-            &:hover {
-                color: $color-orange;
-            }
+        flex: 1 1 auto;
+        list-style: none;
+        overflow: auto;
+    }
 
-            ul {
-              border-right: 1px solid $color-blue;
-            }
+    &__subcategories {
+      border-left: 1px solid $color-blue;
+      margin: 15px 2px 0px;
+      max-height: 700px;
+      opacity: 1;
+      transition: opacity 0.25s ease-in 0.1s, max-height 0.25s ease-in 0.1s;
+      overflow: hidden;
+
+      &.hide {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+        transition: opacity 0.25s ease-in, max-height 0.25s ease-in, margin 0s 0.3s;
+      }
+    }
+
+    &__category,
+    &__subcategory {
+        color: $color-dark;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        &.active,
+        &:hover {
+            color: $color-orange;
         }
     }
 }

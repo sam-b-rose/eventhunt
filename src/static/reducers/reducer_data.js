@@ -2,6 +2,7 @@ import { createReducer } from '../utils';
 import {
     SELECT_CATEGORY,
     RECEIVE_CATEGORIES,
+    RECEIVE_SUBCATEGORIES,
     RECEIVE_EVENTS,
     FETCH_EVENTS_REQUEST,
     UPDATE_LOCATION
@@ -9,6 +10,7 @@ import {
 
 const initialState = {
     categories: [],
+    subcategories: {},
     events: [],
     location: null,
     isFetching: false
@@ -18,6 +20,14 @@ export default createReducer(initialState, {
     [RECEIVE_CATEGORIES]: (state, payload) => {
         return Object.assign({}, state, {
             categories: payload.categories,
+        });
+    },
+    [RECEIVE_SUBCATEGORIES]: (state, payload) => {
+        const subcategories = Object.assign({}, state.subcategories, {
+            [payload.category]: payload.subcategories
+        });
+        return Object.assign({}, state, {
+            subcategories
         });
     },
     [SELECT_CATEGORY]: (state, payload) => {
