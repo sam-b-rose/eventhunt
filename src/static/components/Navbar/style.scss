@@ -16,7 +16,12 @@
     @include flex-grid-column(4);
     height: $navbar-height;
     line-height: $navbar-height;
-    font-size: 1.5rem;
+    font-size: 2rem;
+    color: $color-dark;
+
+    &:hover {
+      color: $color-dark;
+    }
   }
 
   &__right {
@@ -32,5 +37,10 @@
 
   .eb-logo {
     height: 2rem;
+    transition: transform 0.2s linear;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 }

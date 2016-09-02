@@ -1,8 +1,8 @@
 .side-menu {
     display: flex;
-    height: 90vh;
+    height: 85vh;
     background-color: $color-white;
-    padding: 25px;
+    padding: 25px 25px 15px;
     box-shadow: 0 1px 1px 0 rgba(0,0,0,0.50);
 
     &__content {
