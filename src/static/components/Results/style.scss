@@ -1,0 +1,84 @@
+
+.results-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 35px;
+
+  .fa {
+    padding: 10px;
+    color: $color-inactive;
+
+    &:active,
+    &:hover {
+      color: $color-silver-dark;
+      cursor: pointer;
+    }
+
+    &.selected {
+      color: $color-blue;
+    }
+  }
+}
+
+.results-count {
+  flex: 1 1 auto;
+}
+
+.result {
+  background-color: $color-white;
+  padding: 15px;
+  margin: 10px 0;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.50);
+
+  &:first-of-type {
+    margin-top: 0;
+  }
+
+  &__title,
+  &__date,
+  &__location {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__content {
+    display: flex;
+    flex-flow: column nowrap;
+    min-height: 95px;
+  }
+
+  &__title {
+    color: $color-dark;
+    margin: 0 0 5px;
+  }
+
+  &__date {
+    color: $color-silver;
+    flex: 1 1 auto;
+  }
+
+  &__location {
+    color: $color-dark;
+  }
+}
+
+.result-enter {
+  opacity: 0.01;
+}
+
+.result-enter.result-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.result-leave {
+  opacity: 1;
+}
+
+.result-leave.result-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

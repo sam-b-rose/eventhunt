@@ -1,0 +1,41 @@
+.side-menu {
+    background-color: $color-white;
+    padding: 25px;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,0.50);
+
+    &__content {
+      opacity: 1;
+      min-height: 730px;
+      transition: opacity 0.25s;
+
+      &.hide {
+        opacity: 0;
+      }
+    }
+
+    &__title {
+        color: $color-dark;
+        text-transform: uppercase;
+        padding-bottom: 8px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid $color-silver;
+    }
+
+    ul {
+        list-style: none;
+        display: block;
+        li {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            &.active,
+            &:hover {
+                color: $color-orange;
+            }
+
+            ul {
+              border-right: 1px solid $color-blue;
+            }
+        }
+    }
+}

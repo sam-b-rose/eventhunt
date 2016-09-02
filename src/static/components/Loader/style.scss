@@ -1,0 +1,46 @@
+
+$animation-speed: 1000ms;
+$dot-size: 10px;
+
+@mixin animation($delay: 0ms) {
+	animation: fx $animation-speed ease infinite $delay;
+}
+
+.loader {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+}
+
+.dot {
+	width: $dot-size;
+	height: $dot-size;
+	border: ($dot-size / 5) solid $color-orange;
+	border-radius: 50%;
+	float: left;
+	margin: 0 ($dot-size / 2);
+	transform: scale(0);
+	@include animation();
+	&:nth-child(2) {
+		@include animation($animation-speed * 0.3);
+	}
+	&:nth-child(3) {
+		@include animation($animation-speed * 0.6);
+	}
+}
+
+@keyframes fx {
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

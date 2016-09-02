@@ -1,0 +1,36 @@
+@import "~foundation-sites/scss/grid/grid";
+
+.navbar {
+  $navbar-height: 3rem;
+  @include grid-column(12);
+  width: 100%;
+  height: $navbar-height;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.50);
+
+  &__content {
+    @include flex-grid-row();
+    justify-content: space-between;
+  }
+
+  &__title {
+    @include flex-grid-column(4);
+    height: $navbar-height;
+    line-height: $navbar-height;
+    font-size: 1.5rem;
+  }
+
+  &__right {
+    @include flex-grid-column(4);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &__right-text {
+    margin: 0 5px;
+  }
+
+  .eb-logo {
+    height: 2rem;
+  }
+}

@@ -1,0 +1,23 @@
+Django==1.8.7
+django-extensions==1.6.1
+
+# serve files
+whitenoise==3.2
+
+# Rest Framework
+djangorestframework==3.3.2
+
+# Sentry
+raven==5.8.1
+
+# for date processing
+python-dateutil==2.4.2
+
+# Logging
+git+https://github.com/Seedstars/django-rest-logger.git
+
+# Eventbrite
+eventbrite==3.3.3
+
+# for env vars
+python-dotenv==0.5.1
