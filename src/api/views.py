@@ -94,6 +94,7 @@ class EventDataView(GenericAPIView):
             'name': event['name']['text'],
             'start': event['start']['local'],
             'url': event['url'],
+            'logo': event['logo'],
             'address': event['venue']['address']['localized_address_display'],
             'longitude': event['venue']['address']['longitude'],
             'longitude': event['venue']['address']['longitude'],

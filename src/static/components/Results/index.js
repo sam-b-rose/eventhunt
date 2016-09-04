@@ -4,6 +4,7 @@ import FlipMove from 'react-flip-move';
 import moment from 'moment';
 
 import Loader from '../Loader/index';
+import defaultThumb from './images/default.png';
 import './style.scss';
 
 class Results extends Component {
@@ -13,16 +14,21 @@ class Results extends Component {
         isFetching: React.PropTypes.bool.isRequired
     };
 
+    createMapUrl(address) {
+        return `http://maps.google.com/?q=${encodeURIComponent(address)}`;
+    }
+
     renderEvents() {
         return this.props.events.map((event) => {
             return (
                 <li key={event.id} className="result">
-                    <div className="image-container">
+                    <div className="result__image-container">
+                        <img alt="thumbnail" src={event.logo ? event.logo.url : defaultThumb } className="result__image"/>
                     </div>
                     <div className="result__content">
-                        <h2 className="result__title">{event.name}</h2>
+                        <a href={event.url} target="_blank" alt={event.name} className="result__title">{event.name}</a>
                         <small className="result__date">{moment(event.start).format('LL')}</small>
-                        <h3 className="result__location">{event.address}</h3>
+                        <a href={this.createMapUrl(event.address)} alt={event.address} target="_blank" className="result__location">{event.address}</a>
                     </div>
                 </li>
             );
