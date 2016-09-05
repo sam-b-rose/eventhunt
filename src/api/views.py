@@ -91,6 +91,7 @@ class EventDataView(GenericAPIView):
     def _simplify_event(event):
         return {
             'id': event['id'],
+            'categoryId': event['category_id'],
             'name': event['name']['text'],
             'start': event['start']['local'],
             'url': event['url'],

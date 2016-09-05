@@ -1,6 +1,5 @@
 import { createReducer } from '../utils';
 import {
-    SELECT_CATEGORY,
     RECEIVE_CATEGORIES,
     RECEIVE_SUBCATEGORIES,
     RECEIVE_EVENTS,
@@ -28,20 +27,6 @@ export default createReducer(initialState, {
         });
         return Object.assign({}, state, {
             subcategories
-        });
-    },
-    [SELECT_CATEGORY]: (state, payload) => {
-        const selectedCategory = payload.data;
-
-        const categories = state.categories.map((category) => {
-            if (category.id === selectedCategory.id) {
-                category.selected = !category.selected;
-            }
-            return category;
-        });
-
-        return Object.assign({}, state, {
-            categories
         });
     },
     [RECEIVE_EVENTS]: (state, payload) => {

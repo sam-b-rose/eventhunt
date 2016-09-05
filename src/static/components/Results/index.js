@@ -14,21 +14,28 @@ class Results extends Component {
         isFetching: React.PropTypes.bool.isRequired
     };
 
-    createMapUrl(address) {
-        return `http://maps.google.com/?q=${encodeURIComponent(address)}`;
-    }
-
     renderEvents() {
         return this.props.events.map((event) => {
             return (
                 <li key={event.id} className="result">
                     <div className="result__image-container">
-                        <img alt="thumbnail" src={event.logo ? event.logo.url : defaultThumb } className="result__image"/>
+                        <img alt="thumbnail"
+                            src={event.logo ? event.logo.url : defaultThumb}
+                            className="result__image"/>
+                        <div className="result__category-name">
+                            {event.categoryName}
+                        </div>
                     </div>
                     <div className="result__content">
-                        <a href={event.url} target="_blank" alt={event.name} className="result__title">{event.name}</a>
-                        <small className="result__date">{moment(event.start).format('LL')}</small>
-                        <a href={this.createMapUrl(event.address)} alt={event.address} target="_blank" className="result__location">{event.address}</a>
+                        <a href={event.url}
+                            target="_blank"
+                            alt={event.name} className="result__title">{event.name}</a>
+                        <small className="result__date">
+                            {moment(event.start).format('LL')}
+                        </small>
+                        <a href={event.mapUrl}
+                            alt={event.address}
+                            target="_blank" className="result__location">{event.address}</a>
                     </div>
                 </li>
             );
