@@ -38,7 +38,7 @@ class SideMenu extends Component {
 
     renderSubcategories(id) {
         if (!this.props.subcategories[id]) {
-            return;
+            return [];
         }
 
         return this.props.subcategories[id].map((subitem) => {
@@ -47,7 +47,6 @@ class SideMenu extends Component {
                 <li key={subitem.id}
                     className={`side-menu__subcategory ${isSelected}`}
                     onClick={(event) => {
-                        console.log(subitem.name, ' was selected ヽ(´▽`)/');
                         event.preventDefault();
                         event.stopPropagation();
                     }}>

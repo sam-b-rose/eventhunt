@@ -49,6 +49,18 @@
     width: 100%;
   }
 
+  &__category-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    line-height: 30px;
+    color: white;
+    text-indent: 5px;
+    background-color: rgba(0,0,0,0.5);
+  }
+
   &__title,
   &__date,
   &__location {
