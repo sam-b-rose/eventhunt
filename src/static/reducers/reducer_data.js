@@ -11,7 +11,7 @@ const initialState = {
     categories: [],
     subcategories: {},
     events: [],
-    location: null,
+    location: {},
     isFetching: false
 };
 

@@ -21,3 +21,16 @@ export function checkHttpStatus(response) {
 export function parseJSON(response) {
     return response.json();
 }
+
+export function getCoordinates(address) {
+    return {
+        lat: '',
+        long: ''
+    };
+}
+
+export function getAddress(location) {
+    return {
+        address: ''
+    };
+}
