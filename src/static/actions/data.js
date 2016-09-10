@@ -8,7 +8,7 @@ import {
     RECEIVE_SUBCATEGORIES,
     FETCH_EVENTS_REQUEST,
     RECEIVE_EVENTS,
-    UPDATE_LOCATION
+    UPDATE_LOCATION,
 } from '../constants';
 
 
@@ -135,7 +135,6 @@ export function processCategories(data) {
             }
         });
         dispatch(receiveCategories(data));
-        dispatch(fetchEvents());
     };
 }
 

@@ -27,7 +27,9 @@ class SideMenu extends Component {
                 <li key={item.id}
                     className={`side-menu__category ${isSelected}`}
                     onClick={() => { this.props.selectCategory(item); }}>
+
                     {item.name}
+
                     <ul className={`side-menu__subcategories ${hideSubcategories}`}>
                         {this.renderSubcategories(item.id)}
                     </ul>
@@ -37,15 +39,18 @@ class SideMenu extends Component {
     }
 
     renderSubcategories(id) {
+        // Don't return any subcategories if they haven't been requested yet
         if (!this.props.subcategories[id]) {
             return [];
         }
 
         return this.props.subcategories[id].map((subitem) => {
-            const isSelected = subitem.selected ? 'active' : '';
+            const active = subitem.selected ? 'active' : '';
+            const disabled = subitem.enabled ? '' : 'disable';
+
             return (
                 <li key={subitem.id}
-                    className={`side-menu__subcategory ${isSelected}`}
+                    className={`side-menu__subcategory ${active} ${disabled}`}
                     onClick={(event) => {
                         event.preventDefault();
                         event.stopPropagation();
@@ -79,7 +84,7 @@ class SideMenu extends Component {
 function mapStateToProps(state) {
     return {
         categories: state.data.categories,
-        subcategories: state.data.subcategories
+        subcategories: state.data.subcategories,
     };
 }
 

@@ -4,7 +4,7 @@ import {
     RECEIVE_SUBCATEGORIES,
     RECEIVE_EVENTS,
     FETCH_EVENTS_REQUEST,
-    UPDATE_LOCATION
+    UPDATE_LOCATION,
 } from '../constants';
 
 const initialState = {

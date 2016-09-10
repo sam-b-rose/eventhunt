@@ -59,5 +59,10 @@
         &:hover {
             color: $color-orange;
         }
+
+        &.disable {
+          pointer-events: none;
+          color: $color-silver
+        }
     }
 }
