@@ -57,7 +57,8 @@ class SubcategoryDataView(GenericAPIView):
         return {
             'id': subcategory['id'],
             'name': subcategory['name'],
-            'selected': False
+            'selected': False,
+            'enabled': True
         }
 
 
@@ -70,8 +71,8 @@ class EventDataView(GenericAPIView):
         events = []
         params = {
             'categories': request.data.get('categories'),
-            'location.latitude': request.data.get('latitude'),
-            'location.longitude': request.data.get('longitude'),
+            'location.latitude': request.data.get('latitude', ''),
+            'location.longitude': request.data.get('longitude', ''),
             'expand': 'venue, logo'
         }
 
@@ -92,6 +93,7 @@ class EventDataView(GenericAPIView):
         return {
             'id': event['id'],
             'categoryId': event['category_id'],
+            'subcategoryId': event['subcategory_id'],
             'name': event['name']['text'],
             'start': event['start']['local'],
             'url': event['url'],

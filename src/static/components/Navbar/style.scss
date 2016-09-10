@@ -13,7 +13,7 @@
   }
 
   &__title {
-    @include flex-grid-column(4);
+    @include flex-grid-column(2);
     height: $navbar-height;
     line-height: $navbar-height;
     font-size: 2rem;
@@ -24,8 +24,41 @@
     }
   }
 
+  &__location-container {
+    @include flex-grid-column(8);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &__location-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    border: 1px solid $color-silver;
+
+    & i {
+      color: $color-silver;
+      flex: 0 0 auto;
+      width: 30px;
+      text-align: center;
+    }
+  }
+
+  & input[type='text'] {
+    background: transparent;
+    border: none;
+    color: $color-silver;
+
+    &:active,
+    &:focus {
+      border: none;
+      color: $color-silver-dark;
+    }
+  }
+
   &__right {
-    @include flex-grid-column(4);
+    @include flex-grid-column(2);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -38,7 +71,7 @@
   .eb-logo {
     height: 2rem;
     transition: transform 0.2s linear;
-    
+
     &:hover {
       transform: scale(1.1);
     }
