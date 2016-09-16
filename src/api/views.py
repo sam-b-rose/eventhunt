@@ -14,9 +14,7 @@ class CategoryDataView(GenericAPIView):
     def get(self, request):
         """Process GET request and return data."""
 
-        print 'Getting Categories'
-
-        raw_categories = eventbrite.get_categories().get('categories')
+        raw_categories = eventbrite.get_categories().get('categories', [])
         categories = [self._simplify_category(category) for category in raw_categories]
 
         data = {
@@ -40,9 +38,7 @@ class SubcategoryDataView(GenericAPIView):
     def get(self, request, category_id):
         """Process GET request and return data."""
 
-        print 'Getting Subcategories'
-
-        raw_subcategories = eventbrite.get_category(category_id).get('subcategories')
+        raw_subcategories = eventbrite.get_category(category_id).get('subcategories', [])
         subcategories = [self._simplify_subcategory(subcategory) for subcategory in raw_subcategories]
 
         data = {
@@ -65,22 +61,26 @@ class SubcategoryDataView(GenericAPIView):
 class EventDataView(GenericAPIView):
     """Return event search results."""
 
+    def get(self, request):
+        return Response(None, status=status.HTTP_400_BAD_REQUEST)
+
     def post(self, request):
         """Process POST request and return event data."""
-
         events = []
-        params = {
+        raw_events = []
+
+        query_params = {
+            'expand': 'venue, logo',
             'categories': request.data.get('categories'),
             'location.latitude': request.data.get('latitude', ''),
             'location.longitude': request.data.get('longitude', ''),
-            'expand': 'venue, logo'
         }
 
-        if params['categories']:
-            raw_events = eventbrite.event_search(**params).get('events')
+        if query_params['categories']:
+            raw_events = eventbrite.event_search(**query_params).get('events')
 
-            if raw_events:
-                events = [self._simplify_event(event) for event in raw_events]
+        if raw_events:
+            events = [self._simplify_event(event) for event in raw_events]
 
         data = {
             'events': events
