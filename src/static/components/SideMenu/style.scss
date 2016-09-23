@@ -2,7 +2,6 @@
     display: flex;
     height: 85vh;
     background-color: $color-white;
-    padding: 25px 25px 15px;
     box-shadow: 0 1px 1px 0 rgba(0,0,0,0.50);
 
     &__content {
@@ -21,14 +20,15 @@
         flex: 0 0 auto;
         color: $color-dark;
         text-transform: uppercase;
-        padding-bottom: 8px;
-        margin-bottom: 10px;
+        padding: 8px;
+        margin: 10px 10px 0;
         border-bottom: 1px solid $color-silver;
     }
 
     &__categories {
         display: block;
         flex: 1 1 auto;
+        margin: 5px 0;
         list-style: none;
         overflow: auto;
     }
@@ -52,7 +52,7 @@
     &__category,
     &__subcategory {
         color: $color-dark;
-        padding: 10px;
+        padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
         &.active,
