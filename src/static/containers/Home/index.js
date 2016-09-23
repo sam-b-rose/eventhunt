@@ -22,10 +22,10 @@ class HomeView extends Component {
         return (
             <div className="container">
                 <div className="row margin-top-medium">
-                    <div className="small-4 columns">
+                    <div className="small-3 columns">
                         <SideMenu/>
                     </div>
-                    <div className="small-8 columns">
+                    <div className="small-9 columns">
                         <Results/>
                     </div>
                 </div>
