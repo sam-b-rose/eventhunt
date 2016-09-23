@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FlipMove from 'react-flip-move';
 import moment from 'moment';
+import { fetchEvents, setViewMode, updateInitialLoad } from '../../actions/data';
 
 import Loader from '../Loader/index';
 import defaultThumb from './images/default.png';
@@ -11,8 +12,27 @@ class Results extends Component {
 
     static propTypes = {
         events: React.PropTypes.array.isRequired,
-        isFetching: React.PropTypes.bool.isRequired
+        location: React.PropTypes.object,
+        viewMode: React.PropTypes.object.isRequired,
+        selectedMode: React.PropTypes.object,
+        initialLoad: React.PropTypes.bool.isRequired,
+        isFetching: React.PropTypes.bool.isRequired,
+        setViewMode: React.PropTypes.func.isRequired,
+        updateInitialLoad: React.PropTypes.func.isRequired,
+        fetchEvents: React.PropTypes.func.isRequired,
     };
+
+    componentWillReceiveProps(nextProps) {
+        if (Object.keys(nextProps.location).length > 0 &&
+            !nextProps.initialLoad) {
+            this.props.updateInitialLoad(true);
+            this.props.fetchEvents();
+        }
+
+        if (nextProps.selectedMode === null) {
+            this.props.setViewMode(this.props.viewMode.LIST);
+        }
+    }
 
     renderEvents() {
         return this.props.events.map((event) => {
@@ -43,10 +63,8 @@ class Results extends Component {
     }
 
     render() {
-        const mode = {
-            list: true,
-            mode: false
-        };
+        const { selectedMode } = this.props;
+        const mode = selectedMode ? selectedMode.value : 0;
 
         const resultsCount = this.props.events.length;
         const msg = (resultsCount > 0) ? `${resultsCount} events for you` : '';
@@ -58,15 +76,21 @@ class Results extends Component {
                     {(this.props.isFetching) ? <Loader/> : false}
 
                     <div className="results-count">{msg}</div>
-                    <i className={`fa fa-bars ${mode.list ? 'selected' : ''}`}></i>
-                    <i className={`fa fa-map ${mode.map}`}></i>
+                    <i className={`fa fa-bars ${mode === 0 ? 'selected' : ''}`}
+                        onClick={() => { this.props.setViewMode(this.props.viewMode.LIST); }}></i>
+                    <i className={`fa fa-map ${mode === 1 ? 'selected' : ''}`}
+                        onClick={() => { this.props.setViewMode(this.props.viewMode.MAP); }}></i>
 
                 </div>
-                <ul className="result-list">
-                    <FlipMove enterAnimation="fade" leaveAnimation="fade">
-                        {this.renderEvents()}
-                    </FlipMove>
-                </ul>
+                {mode === 0 ?
+                    (<ul className="result-list">
+                        <FlipMove enterAnimation="fade" leaveAnimation="fade">
+                            {this.renderEvents()}
+                        </FlipMove>
+                    </ul>) :
+                    (<p>map</p>)
+                }
+
             </div>
         );
     }
@@ -75,8 +99,12 @@ class Results extends Component {
 function mapStateToProps(state) {
     return {
         events: state.data.events,
+        location: state.data.location,
+        selectedMode: state.data.selectedMode,
+        viewMode: state.data.viewMode,
+        initialLoad: state.data.initialLoad,
         isFetching: state.data.isFetching,
     };
 }
 
-export default connect(mapStateToProps, null)(Results);
+export default connect(mapStateToProps, { fetchEvents, setViewMode, updateInitialLoad })(Results);

@@ -8,6 +8,8 @@ import {
     RECEIVE_SUBCATEGORIES,
     FETCH_EVENTS_REQUEST,
     RECEIVE_EVENTS,
+    SET_SELECTED_MODE,
+    UPDATE_INITIAL_LOAD,
     UPDATE_LOCATION,
 } from '../constants';
 
@@ -33,7 +35,7 @@ export function fetchEvents() {
         const { categories, location } = state().data;
 
         // Create string of selected category ID's
-        const catList = categories.filter((category) => {
+        const categoryList = categories.filter((category) => {
             return category.selected;
         }).map((category) => {
             return category.id;
@@ -46,7 +48,7 @@ export function fetchEvents() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                categories: catList,
+                categories: categoryList,
                 latitude: location ? location.latitude : null,
                 longitude: location ? location.longitude : null,
             })
@@ -180,6 +182,26 @@ export function selectCategory(selectedCategory) {
 
         dispatch(processCategories({ categories }));
         dispatch(fetchEvents());
+    };
+}
+
+/**
+* Set the view mode
+*/
+export function setViewMode(mode) {
+    return {
+        type: SET_SELECTED_MODE,
+        payload: mode
+    };
+}
+
+/**
+* Initial Load
+*/
+export function updateInitialLoad(hasLoaded) {
+    return {
+        type: UPDATE_INITIAL_LOAD,
+        payload: hasLoaded
     };
 }
 
