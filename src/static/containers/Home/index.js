@@ -15,6 +15,11 @@ class HomeView extends Component {
             this.props.updateLocation(position.coords);
         }, () => {
             console.error('Could not get current location. Please select a location manually.');
+
+            // update with default location
+            this.props.updateLocation({
+               address: 'San Francisco, CA'
+            });
         });
     }
 

@@ -11,7 +11,7 @@ import {
 
 const initialState = {
     categories: [],
-    subcategories: {},
+    subcategories: [],
     events: [],
     location: {},
     selectedMode: null,
@@ -19,7 +19,6 @@ const initialState = {
         LIST: { value: 0, name: 'List', code: 'L' },
         MAP: { value: 1, name: 'Map', code: 'M' }
     },
-    initialLoad: false,
     isFetching: false
 };
 
@@ -30,11 +29,8 @@ export default createReducer(initialState, {
         });
     },
     [RECEIVE_SUBCATEGORIES]: (state, payload) => {
-        const subcategories = Object.assign({}, state.subcategories, {
-            [payload.category]: payload.subcategories
-        });
         return Object.assign({}, state, {
-            subcategories
+            subcategories: payload.subcategories
         });
     },
     [RECEIVE_EVENTS]: (state, payload) => {
@@ -53,16 +49,12 @@ export default createReducer(initialState, {
             selectedMode: payload
         });
     },
-    [UPDATE_INITIAL_LOAD]: (state, payload) => {
-        return Object.assign({}, state, {
-            initialLoad: payload
-        });
-    },
     [UPDATE_LOCATION]: (state, payload) => {
         return Object.assign({}, state, {
             location: {
-                latitude: payload.latitude,
-                longitude: payload.longitude
+                address: payload.address ? payload.address : null,
+                latitude: payload.latitude ? payload.latitude : null,
+                longitude: payload.longitude ? payload.longitude : null
             }
         });
     }
