@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { updateLocation } from '../../actions/data';
 
 import ebLogo from './images/eb-logo.png';
 import './style.scss';
@@ -9,10 +10,18 @@ class Navbar extends Component {
 
     static propTypes = {
         location: React.PropTypes.object.isRequired,
+        updateLocation: React.PropTypes.func.isRequired,
     };
 
+    handleBlur(e) {
+        var value = e.target.value;
+        this.props.updateLocation({
+            address: value
+        });
+    }
+
     render() {
-        const hasLocation = Object.keys(this.props.location).length > 0;
+        const hasLocation = this.props.location.latitude || this.props.location.address;
         const locationIcon = hasLocation ? 'fa-location-arrow' : 'fa-spinner fa-pulse';
         const locationPlaceholder = hasLocation ? 'Current Location' : 'Getting current location...'
 
@@ -28,6 +37,7 @@ class Navbar extends Component {
                             <i className={`fa ${locationIcon}`} aria-hidden="true"></i>
                             <input type="text"
                                 placeholder={locationPlaceholder}
+                                onBlur={(e) => { if (e.target.value) this.props.updateLocation({ address: e.target.value }); }}
                                 className="navbar__location"/>
                         </div>
                     </div>
@@ -50,4 +60,4 @@ function mapPropsToState(state) {
     };
 }
 
-export default connect(mapPropsToState, null)(Navbar);
+export default connect(mapPropsToState, { updateLocation })(Navbar);

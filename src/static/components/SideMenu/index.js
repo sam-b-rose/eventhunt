@@ -2,26 +2,31 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FlipMove from 'react-flip-move';
 
-import { fetchCategories, selectCategory } from '../../actions/data';
+import { fetchCategories, fetchSubcategories, selectCategory } from '../../actions/data';
 import './style.scss';
 
 class SideMenu extends Component {
 
     static propTypes = {
         categories: React.PropTypes.array.isRequired,
-        subcategories: React.PropTypes.object,
+        subcategories: React.PropTypes.array.isRequired,
         fetchCategories: React.PropTypes.func.isRequired,
+        fetchSubcategories: React.PropTypes.func.isRequired,
         selectCategory: React.PropTypes.func.isRequired,
     };
 
     componentWillMount() {
         this.props.fetchCategories();
+        this.props.fetchSubcategories();
     }
 
     renderCategories() {
         return this.props.categories.map((item) => {
+            const subcategories = this.props.subcategories.filter((sub) => {
+               return sub.enabled && sub.parentId === item.id;
+            });
             const isSelected = item.selected ? 'active' : '';
-            const hideSubcategories = (!item.selected || !this.props.subcategories[item.id]) ? 'hide' : '';
+            const hideSubcategories = (!item.selected || (subcategories.length === 0) ? 'hide' : '');
 
             return (
                 <li key={item.id}
@@ -31,31 +36,27 @@ class SideMenu extends Component {
                     {item.name}
 
                     <ul className={`side-menu__subcategories ${hideSubcategories}`}>
-                        {this.renderSubcategories(item.id)}
+                        {this.renderSubcategories(subcategories)}
                     </ul>
                 </li>
             );
         });
     }
 
-    renderSubcategories(id) {
+    renderSubcategories(subcategories) {
         // Don't return any subcategories if they haven't been requested yet
-        if (!this.props.subcategories[id]) {
-            return [];
-        }
-
-        return this.props.subcategories[id].map((subitem) => {
-            const active = subitem.selected ? 'active' : '';
-            const disabled = subitem.enabled ? '' : 'disable';
-
+        // if (!this.props.subcategories[id]) {
+        //     return [];
+        // }
+        return subcategories.map((sub) => {
             return (
-                <li key={subitem.id}
-                    className={`side-menu__subcategory ${active} ${disabled}`}
+                <li key={sub.id}
+                    className={`side-menu__subcategory`}
                     onClick={(event) => {
                         event.preventDefault();
                         event.stopPropagation();
                     }}>
-                    {subitem.name}
+                    {sub.name}
                 </li>
             );
         });
@@ -88,4 +89,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, { fetchCategories, selectCategory })(SideMenu);
+export default connect(mapStateToProps, { fetchCategories, fetchSubcategories, selectCategory })(SideMenu);

@@ -8,6 +8,7 @@ from eventbrite import Eventbrite
 
 eventbrite = Eventbrite(settings.EVENTBRITE_OAUTH_TOKEN)
 
+
 class CategoryDataView(GenericAPIView):
     """Return category data from Eventbrite."""
 
@@ -35,14 +36,13 @@ class CategoryDataView(GenericAPIView):
 class SubcategoryDataView(GenericAPIView):
     """Return subcategory data from Eventbrite."""
 
-    def get(self, request, category_id):
+    def get(self, request):
         """Process GET request and return data."""
 
-        raw_subcategories = eventbrite.get_category(category_id).get('subcategories', [])
+        raw_subcategories = eventbrite.get_subcategories().get('subcategories', [])
         subcategories = [self._simplify_subcategory(subcategory) for subcategory in raw_subcategories]
 
         data = {
-            'category': category_id,
             'subcategories': sorted(subcategories, key=lambda k: k['id'])
         }
 
@@ -52,6 +52,7 @@ class SubcategoryDataView(GenericAPIView):
     def _simplify_subcategory(subcategory):
         return {
             'id': subcategory['id'],
+            'parentId': subcategory['parent_category']['id'],
             'name': subcategory['name'],
             'selected': False,
             'enabled': True
@@ -66,15 +67,27 @@ class EventDataView(GenericAPIView):
 
     def post(self, request):
         """Process POST request and return event data."""
+        default_location = 'San Francisco, CA'
         events = []
         raw_events = []
 
         query_params = {
             'expand': 'venue, logo',
             'categories': request.data.get('categories'),
-            'location.latitude': request.data.get('latitude', ''),
-            'location.longitude': request.data.get('longitude', ''),
+            'location.within': '20mi'
         }
+
+        if request.data.get('latitude') and request.data.get('longitude'):
+            location = {
+                'location.latitude': request.data.get('latitude'),
+                'location.longitude': request.data.get('longitude'),
+            }
+        else:
+            location = {
+                'location.address': request.data.get('address', default_location)
+            }
+
+        query_params.update(location)
 
         if query_params['categories']:
             raw_events = eventbrite.event_search(**query_params).get('events')

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FlipMove from 'react-flip-move';
 import moment from 'moment';
-import { fetchEvents, setViewMode, updateInitialLoad } from '../../actions/data';
+import { fetchEvents, setViewMode } from '../../actions/data';
 
 import Loader from '../Loader/index';
 import defaultThumb from './images/default.png';
@@ -12,23 +12,14 @@ class Results extends Component {
 
     static propTypes = {
         events: React.PropTypes.array.isRequired,
-        location: React.PropTypes.object,
         viewMode: React.PropTypes.object.isRequired,
         selectedMode: React.PropTypes.object,
-        initialLoad: React.PropTypes.bool.isRequired,
         isFetching: React.PropTypes.bool.isRequired,
         setViewMode: React.PropTypes.func.isRequired,
-        updateInitialLoad: React.PropTypes.func.isRequired,
         fetchEvents: React.PropTypes.func.isRequired,
     };
 
     componentWillReceiveProps(nextProps) {
-        if (Object.keys(nextProps.location).length > 0 &&
-            !nextProps.initialLoad) {
-            this.props.updateInitialLoad(true);
-            this.props.fetchEvents();
-        }
-
         if (nextProps.selectedMode === null) {
             this.props.setViewMode(this.props.viewMode.LIST);
         }
@@ -102,9 +93,8 @@ function mapStateToProps(state) {
         location: state.data.location,
         selectedMode: state.data.selectedMode,
         viewMode: state.data.viewMode,
-        initialLoad: state.data.initialLoad,
         isFetching: state.data.isFetching,
     };
 }
 
-export default connect(mapStateToProps, { fetchEvents, setViewMode, updateInitialLoad })(Results);
+export default connect(mapStateToProps, { fetchEvents, setViewMode })(Results);

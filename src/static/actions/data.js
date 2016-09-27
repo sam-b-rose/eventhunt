@@ -9,13 +9,12 @@ import {
     FETCH_EVENTS_REQUEST,
     RECEIVE_EVENTS,
     SET_SELECTED_MODE,
-    UPDATE_INITIAL_LOAD,
     UPDATE_LOCATION,
 } from '../constants';
 
 
 /**
-* Event Actions
+* Event Actions®
 */
 export function receiveEvents(data) {
     return {
@@ -32,7 +31,12 @@ export function fetchEventsRequest() {
 
 export function fetchEvents() {
     return (dispatch, state) => {
-        const { categories, location } = state().data;
+        const { categories, subcategories, location } = state().data;
+
+        let updatedSubcategories = subcategories.map((sub) => {
+            sub.enabled = false;
+            return sub;
+        });
 
         // Create string of selected category ID's
         const categoryList = categories.filter((category) => {
@@ -49,6 +53,7 @@ export function fetchEvents() {
             },
             body: JSON.stringify({
                 categories: categoryList,
+                address: location ? location.address : null,
                 latitude: location ? location.latitude : null,
                 longitude: location ? location.longitude : null,
             })
@@ -65,12 +70,23 @@ export function fetchEvents() {
                 .shift()
                 .name;
 
+                // Set Subcategories
+               if (event.subcategoryId) {
+                   updatedSubcategories.forEach((sub) => {
+                       sub.enabled = sub.id === event.subcategoryId;
+                       return sub;
+                   });
+               }
+
                 // create Google Map URL from Address
                 event.mapUrl = [
                     'http://maps.google.com/?q=',
                     encodeURIComponent(event.address),
                 ].join('');
             });
+            dispatch(receiveSubcategories({
+                subcategories: updatedSubcategories
+            }));
             dispatch(receiveEvents(data));
         })
         .catch(error => {
@@ -80,6 +96,7 @@ export function fetchEvents() {
         });
     };
 }
+
 
 /**
 * Subcategory Actions
@@ -91,9 +108,9 @@ export function receiveSubcategories(data) {
     };
 }
 
-export function fetchSubcategories(id) {
+export function fetchSubcategories() {
     return (dispatch, state) => {
-        return fetch(`${SERVER_URL}/api/v1/categories/${id}/`, {
+        return fetch(`${SERVER_URL}/api/v1/subcategories/`, {
             headers: {
                 Accept: 'application/json'
             }
@@ -122,20 +139,10 @@ export function receiveCategories(data) {
     };
 }
 
-export function processCategories(data) {
+export function saveCategories(data) {
     return (dispatch, state) => {
-        const { subcategories } = state().data;
         const { categories } = data;
-
         sessionStorage.setItem('categories', JSON.stringify(data));
-
-        // Get Subcategories for all Selected Categories
-        categories.forEach((category) => {
-            if (category.selected &&
-                !subcategories.hasOwnProperty(category.id)) {
-                dispatch(fetchSubcategories(category.id));
-            }
-        });
         dispatch(receiveCategories(data));
     };
 }
@@ -153,7 +160,7 @@ export function fetchCategories() {
             .then(checkHttpStatus)
             .then(parseJSON)
             .then(data => {
-                dispatch(processCategories(data));
+                dispatch(saveCategories(data));
             })
             .catch(error => {
                 if (error.response.status === 401) {
@@ -162,7 +169,7 @@ export function fetchCategories() {
             });
         }
 
-        return dispatch(processCategories(JSON.parse(catData)));
+        return dispatch(saveCategories(JSON.parse(catData)));
     };
 }
 
@@ -180,10 +187,11 @@ export function selectCategory(selectedCategory) {
             return category;
         });
 
-        dispatch(processCategories({ categories }));
+        dispatch(saveCategories({ categories }));
         dispatch(fetchEvents());
     };
 }
+
 
 /**
 * Set the view mode
@@ -195,23 +203,20 @@ export function setViewMode(mode) {
     };
 }
 
-/**
-* Initial Load
-*/
-export function updateInitialLoad(hasLoaded) {
-    return {
-        type: UPDATE_INITIAL_LOAD,
-        payload: hasLoaded
-    };
-}
-
 
 /**
 * Location
 */
-export function updateLocation(coords) {
+export function receiveLocation(location) {
     return {
         type: UPDATE_LOCATION,
-        payload: coords
+        payload: location
+    };
+}
+
+export function updateLocation(location) {
+    return (dispatch, state) => {
+        dispatch(receiveLocation(location));
+        dispatch(fetchEvents());
     };
 }
