@@ -55,7 +55,7 @@ class SubcategoryDataView(GenericAPIView):
             'parentId': subcategory['parent_category']['id'],
             'name': subcategory['name'],
             'selected': False,
-            'enabled': True
+            'enabled': False
         }
 
 
@@ -73,7 +73,7 @@ class EventDataView(GenericAPIView):
 
         query_params = {
             'expand': 'venue, logo',
-            'categories': request.data.get('categories'),
+            'categories': request.data.get('category'),
             'location.within': '20mi'
         }
 
