@@ -29,21 +29,10 @@ export function fetchEventsRequest() {
     };
 }
 
-export function fetchEvents() {
+export function fetchEvents(selectedCategory) {
     return (dispatch, state) => {
-        const { categories, subcategories, location } = state().data;
-
-        let updatedSubcategories = subcategories.map((sub) => {
-            sub.enabled = false;
-            return sub;
-        });
-
-        // Create string of selected category ID's
-        const categoryList = categories.filter((category) => {
-            return category.selected;
-        }).map((category) => {
-            return category.id;
-        }).join(',');
+        let updatedSubs;
+        const { subcategories, location, events } = state().data;
 
         dispatch(fetchEventsRequest());
         return fetch(`${SERVER_URL}/api/v1/events/`, {
@@ -52,7 +41,7 @@ export function fetchEvents() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                categories: categoryList,
+                category: selectedCategory.id,
                 address: location ? location.address : null,
                 latitude: location ? location.latitude : null,
                 longitude: location ? location.longitude : null,
@@ -70,10 +59,11 @@ export function fetchEvents() {
                 .shift()
                 .name;
 
-                // Set Subcategories
                if (event.subcategoryId) {
-                   updatedSubcategories.forEach((sub) => {
-                       sub.enabled = sub.id === event.subcategoryId;
+                    updatedSubs = subcategories.map((sub) => {
+                       if (sub.id === event.subcategoryId) {
+                           sub.enabled = true;
+                       }
                        return sub;
                    });
                }
@@ -84,10 +74,15 @@ export function fetchEvents() {
                     encodeURIComponent(event.address),
                 ].join('');
             });
+
+            const updatedEvents = events.concat(data.events);
+
             dispatch(receiveSubcategories({
-                subcategories: updatedSubcategories
+                subcategories: updatedSubs
             }));
-            dispatch(receiveEvents(data));
+            dispatch(receiveEvents({
+                events: updatedEvents
+            }));
         })
         .catch(error => {
             if (error.response.status === 401) {
@@ -180,15 +175,38 @@ export function fetchCategories() {
 export function selectCategory(selectedCategory) {
     return (dispatch, state) => {
         // Update selected state of categories
+        const { events, subcategories } = state().data;
         const categories = state().data.categories.map((category) => {
             if (category.id === selectedCategory.id) {
                 category.selected = !category.selected;
+                selectedCategory = category;
             }
             return category;
         });
 
+        if (selectedCategory.selected) {
+            dispatch(fetchEvents(selectedCategory));
+        } else {
+            const updatedEvents = events.filter((event) => {
+                return selectedCategory.id !== event.categoryId;
+            });
+
+            // Set Subcategories
+            let updatedSubcategories = subcategories.map((sub) => {
+                if (sub.parentId === selectedCategory.id)
+                    sub.enabled = false;
+                return sub;
+            });
+
+            dispatch(receiveSubcategories({
+                subcategories: updatedSubcategories
+            }));
+            dispatch(receiveEvents({
+                events: updatedEvents
+            }));
+        }
+
         dispatch(saveCategories({ categories }));
-        dispatch(fetchEvents());
     };
 }
 
@@ -216,7 +234,16 @@ export function receiveLocation(location) {
 
 export function updateLocation(location) {
     return (dispatch, state) => {
+        const { categories } = state().data;
+
         dispatch(receiveLocation(location));
-        dispatch(fetchEvents());
+        dispatch(receiveEvents({
+            events: []
+        }));
+
+        categories.forEach( category => {
+           if (category.selected)
+               dispatch(fetchEvents(category));
+        });
     };
 }
