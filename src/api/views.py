@@ -28,8 +28,7 @@ class CategoryDataView(GenericAPIView):
     def _simplify_category(category):
         return {
             'id': category['id'],
-            'name': category['short_name'],
-            'selected': False
+            'name': category['short_name']
         }
 
 
@@ -53,10 +52,7 @@ class SubcategoryDataView(GenericAPIView):
         return {
             'id': subcategory['id'],
             'parentId': subcategory['parent_category']['id'],
-            'name': subcategory['name'],
-            'selected': False,
-            'enabled': False
-        }
+            'name': subcategory['name'],        }
 
 
 class EventDataView(GenericAPIView):
