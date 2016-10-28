@@ -52,7 +52,7 @@ class SideMenu extends Component {
                         event.preventDefault();
                         event.stopPropagation();
                     }}>
-                    {sub.name} ({sub.count})
+                    {sub.name} <span>{sub.count}</span>
                 </li>
             );
         });
