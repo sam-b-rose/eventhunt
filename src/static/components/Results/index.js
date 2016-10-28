@@ -26,7 +26,13 @@ class Results extends Component {
     }
 
     renderEvents() {
-        return this.props.events.map((event) => {
+        return this.props.events
+            .sort(function(a, b) {
+                a = new Date(a.start);
+                b = new Date(b.start);
+                return a<b ? -1 : a>b ? 1 : 0;
+            })
+            .map((event) => {
             return (
                 <li key={event.id} className="result">
                     <div className="result__image-container">
