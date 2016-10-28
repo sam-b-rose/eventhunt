@@ -44,10 +44,6 @@ class SideMenu extends Component {
     }
 
     renderSubcategories(subcategories) {
-        // Don't return any subcategories if they haven't been requested yet
-        // if (!this.props.subcategories[id]) {
-        //     return [];
-        // }
         return subcategories.map((sub) => {
             return (
                 <li key={sub.id}
@@ -56,7 +52,7 @@ class SideMenu extends Component {
                         event.preventDefault();
                         event.stopPropagation();
                     }}>
-                    {sub.name}
+                    {sub.name} <span>{sub.count}</span>
                 </li>
             );
         });

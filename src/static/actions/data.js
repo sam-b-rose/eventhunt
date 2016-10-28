@@ -63,6 +63,7 @@ export function fetchEvents(selectedCategory) {
                     updatedSubs = subcategories.map((sub) => {
                        if (sub.id === event.subcategoryId) {
                            sub.enabled = true;
+                           sub.count += 1;
                        }
                        return sub;
                    });
@@ -113,6 +114,14 @@ export function fetchSubcategories() {
         .then(checkHttpStatus)
         .then(parseJSON)
         .then(data => {
+
+            data.subcategories = data.subcategories.map((sub) => {
+                sub.enabled = false;
+                sub.selected = false;
+                sub.count = 0;
+                return sub;
+            });
+
             dispatch(receiveSubcategories(data));
         })
         .catch(error => {
@@ -193,8 +202,10 @@ export function selectCategory(selectedCategory) {
 
             // Set Subcategories
             let updatedSubcategories = subcategories.map((sub) => {
-                if (sub.parentId === selectedCategory.id)
+                if (sub.parentId === selectedCategory.id) {
                     sub.enabled = false;
+                    sub.count = 0;
+                }
                 return sub;
             });
 
