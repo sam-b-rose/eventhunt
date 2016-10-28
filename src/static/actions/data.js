@@ -202,8 +202,10 @@ export function selectCategory(selectedCategory) {
 
             // Set Subcategories
             let updatedSubcategories = subcategories.map((sub) => {
-                if (sub.parentId === selectedCategory.id)
+                if (sub.parentId === selectedCategory.id) {
                     sub.enabled = false;
+                    sub.count = 0;
+                }
                 return sub;
             });
 
