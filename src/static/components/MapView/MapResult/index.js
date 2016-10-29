@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default (props) => {
-    const style = this.props.$hover ? 'transform: scale(1.1);' : '';
+import {mapResultStyle} from './style.scss';
 
-    return (
-        <div style={style}>
-            {this.props.text}
-        </div>
-    );
-};
+class MapResult extends Component {
+    static propTypes = {
+        text: React.PropTypes.string,
+    };
+
+    render() {
+        return (
+            <div className="marker">
+                {this.props.text}
+            </div>
+        );
+    }
+}
+
+export default MapResult;

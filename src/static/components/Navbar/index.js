@@ -13,11 +13,13 @@ class Navbar extends Component {
         updateLocation: React.PropTypes.func.isRequired,
     };
 
-    handleBlur(e) {
+    handleKeyPress(e) {
         var value = e.target.value;
-        this.props.updateLocation({
-            address: value
-        });
+        if (value && e.key === 'Enter') {
+            this.props.updateLocation({
+                address: value
+            });
+        }
     }
 
     render() {
@@ -37,14 +39,14 @@ class Navbar extends Component {
                             <i className={`fa ${locationIcon}`} aria-hidden="true"></i>
                             <input type="text"
                                 placeholder={locationPlaceholder}
-                                onBlur={(e) => { if (e.target.value) this.props.updateLocation({ address: e.target.value }); }}
+                                onKeyPress={(e) => { this.handleKeyPress(e); }}
                                 className="navbar__location"/>
                         </div>
                     </div>
 
                     <div className="navbar__right">
                         <small className="navbar__right-text">powered by</small>
-                        <a alt="Eventbrite" href="https://eventbrite.com" target="_blank">
+                        <a alt="Eventbrite" href="https://eventbrite.com" target="_blank" tabIndex="-1">
                             <img className="eb-logo" alt="Eventbrite" src={ebLogo}/>
                         </a>
                     </div>

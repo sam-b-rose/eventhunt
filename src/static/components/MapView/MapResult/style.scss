@@ -1,0 +1,19 @@
+.marker {
+  $width: 30px;
+  $height: 30px;
+  // positioning
+  position: absolute;
+  width: $width;
+  height: $height;
+  left: -$width / 2;
+  top: -$height / 2;
+
+  // style
+  border-radius: $width;
+  background-color: $color-orange;
+  text-align: center;
+  color: $color-white;
+  font-size: 1rem;
+  font-weight: 300;
+  padding: 0.5rem 0.25rem;
+}

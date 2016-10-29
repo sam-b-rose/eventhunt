@@ -5,6 +5,7 @@ import moment from 'moment';
 import { fetchEvents, setViewMode } from '../../actions/data';
 
 import Loader from '../Loader/index';
+import MapView from '../MapView/index';
 import defaultThumb from './images/default.png';
 import './style.scss';
 
@@ -85,7 +86,9 @@ class Results extends Component {
                             {this.renderEvents()}
                         </FlipMove>
                     </ul>) :
-                    (<p>map</p>)
+                    (<div className="map-container">
+                        <MapView events={this.props.events}/>
+                     </div>)
                 }
 
             </div>

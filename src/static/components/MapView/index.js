@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import GoogleMap from 'google-map-react';
 import MapResult from './MapResult';
@@ -6,31 +7,37 @@ import MapResult from './MapResult';
 class MapView extends Component {
 
     static propTypes = {
+        events: React.PropTypes.array,
         center: React.PropTypes.object,
         zoom: React.PropTypes.number,
         place: React.PropTypes.object,
-    }
+    };
 
     static defaultProps = {
-        center: {
-            lat: 59.938043,
-            lng: 30.337157
-        },
-        zoom: 9,
-        place: {
-            lat: 59.724465,
-            lng: 30.080121
-        }
+        zoom: 12
     };
+
+    renderMapResults() {
+        return this.props.events.map((event, index) => {
+            return (<MapResult lat={event.latitude} lng={event.longitude} key={event.id} text={''+index}/>);
+        });
+    }
 
     render() {
         return (
-            <GoogleMap defaultCenter={this.props.center} defaultZoom={this.props.zoom}>
-                <MapResult lat={59.955413} lng={30.337844} text={'A'}/>
-                <MapResult {...this.props.place} text={'B'}/>
+            <GoogleMap center={{lat: this.props.location.latitude, lng: this.props.location.longitude}}
+                       zoom={this.props.zoom}>
+                {this.renderMapResults()}
             </GoogleMap>
         );
     }
 }
 
-export default MapView;
+function mapStateToProps(state) {
+    return {
+        location: state.data.location,
+        events: state.data.events,
+    };
+}
+
+export default connect(mapStateToProps, null )(MapView);
