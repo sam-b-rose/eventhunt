@@ -120,3 +120,9 @@
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }
+
+.map-container {
+  position: relative;
+  height: 80vh;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.50);
+}

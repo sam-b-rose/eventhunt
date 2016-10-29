@@ -108,6 +108,6 @@ class EventDataView(GenericAPIView):
             'url': event['url'],
             'logo': event['logo'],
             'address': event['venue']['address']['localized_address_display'],
-            'longitude': event['venue']['address']['longitude'],
+            'latitude': event['venue']['address']['latitude'],
             'longitude': event['venue']['address']['longitude'],
         }
