@@ -15,14 +15,11 @@ This is a web app in progress. I created it for learning purposes, to practice a
 - Working with other API's (Eventbrite in this case)
 
 ## Roadmap
-### Done
-- Get events within your area based on your current location
-- Be able to filter events based on categories of interest
-
-### ToDo
-- Create a map view of the events
-- Have a Yay or Nay view where a single event is present at a time. The use picks YES, NO, or more info. If Yes, more events are presented from that category. If no, then less events are presented from that category.
-- Add an "Interested" or save list to pin events
+- [x] Get events within your area based on your current location
+- [x] Be able to filter events based on categories of interest
+- [x] ~~Create a map view of the events~~
+- [ ] Have a Yay or Nay view where a single event is present at a time. The use picks YES, NO, or more info. If Yes, more events are presented from that category. If no, then less events are presented from that category.
+- [ ] Add an "Interested" or save list to pin events
 
 ## Design Plans
 
