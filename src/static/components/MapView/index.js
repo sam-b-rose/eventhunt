@@ -4,12 +4,15 @@ import { connect } from 'react-redux';
 import GoogleMap from 'google-map-react';
 import MapResult from './MapResult';
 
+import API_KEY from './constants';
+
 class MapView extends Component {
 
     static propTypes = {
         events: React.PropTypes.array,
         center: React.PropTypes.object,
         zoom: React.PropTypes.number,
+        location: React.PropTypes.object,
         place: React.PropTypes.object,
     };
 
@@ -25,8 +28,15 @@ class MapView extends Component {
 
     render() {
         return (
-            <GoogleMap center={{lat: this.props.location.latitude, lng: this.props.location.longitude}}
-                       zoom={this.props.zoom}>
+            <GoogleMap zoom={this.props.zoom}
+                bootstrapURLKeys={{
+                    key: API_KEY,
+                    language: 'en',
+                }}
+                center={{
+                    lat: this.props.location.latitude,
+                    lng: this.props.location.longitude,
+                }}>
                 {this.renderMapResults()}
             </GoogleMap>
         );
@@ -40,4 +50,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, null )(MapView);
+export default connect(mapStateToProps, null)(MapView);
